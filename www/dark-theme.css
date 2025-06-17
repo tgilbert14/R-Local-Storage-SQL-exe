@@ -1,0 +1,59 @@
+/* Dark Theme Styles */
+body {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+/* Buttons */
+.button,
+.action-button {
+    background-color: #333333;
+    color: white;
+    border: 1px solid #666666;
+}
+
+/* Modal */
+.modal-content {
+    background-color: #222222;
+    color: #f8f9fa;
+}
+
+/* Inputs */
+input,
+select {
+    background-color: #333333;
+    color: #ffffff;
+    border: 1px solid #444444;
+}
+
+/* Headers */
+h1,
+h2,
+h3 {
+    color: #f8f9fa;
+}
+
+/* Sidebar background */
+.sidebar {
+    background-color: #1f1f1f;
+    color: #ffffff;
+    /* Ensures text is white */
+}
+
+/* Sidebar links */
+.sidebar a {
+    color: #bbbbbb;
+    /* Slightly dimmed to avoid harsh contrast */
+}
+
+/* Sidebar headers */
+.sidebar h3,
+.sidebar h2 {
+    color: #f8f9fa;
+}
+
+/* Active tab */
+.sidebar .active {
+    background-color: #333333;
+    color: #ffffff;
+}

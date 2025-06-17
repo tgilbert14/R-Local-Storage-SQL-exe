@@ -1,0 +1,96 @@
+-run app in R,
+shiny::runApp()
+
+--update main.js with correct URL from shiny app, e.g., http://127.0.0.1:7332
+
+-open terminal (in app dir) and start electron (should run in another window) - check it works...
+npm start
+
+-install electron packager,
+npm install -g electron-packager
+
+-package app (use app name) - windows(.exe),
+electron-packager . local_SQL_storage_electron --platform=win32 --arch=x64 --out=dist/ --overwrite
+
+-macOS
+electron-packager . local_SQL_storage_electron --platform=darwin --arch=x64 --out=dist/ --overwrite
+
+-Linux
+electron-packager . local_SQL_storage_electron --platform=linux --arch=x64 --out=dist/ --overwrite
+
+install... make installer
+--check package.json for updates ("Build")
+
+--if missing
+npm install electron-builder --save-dev
+
+npm run build
+
+
+--troubleshooting...
+-got error so had to help find package.json file...
+-had to add electron to dependecies,
+npm install electron --save
+
+-got warnings so had to uninstall and reinstall with updated package.json
+-then created .exe in dist folder!
+
+
+-missing this,
+npm install electron-prebuilt-compile --save-dev
+
+--should add it ti json, then run again,
+electron-forge make
+
+--needed exact version.. so uninstall
+npm uninstall electron-prebuilt-compile
+
+--check version to install at https://www.npmjs.com/package/electron-prebuilt-compile
+npm install electron-prebuilt-compile@8.2.0 --save-dev
+
+--fix vulnerabilities?
+npm audit fix OR npm audit fix --force
+
+--try again (confirm JSON file too, get rid of '^' for exact build #),
+electron-forge make
+
+--clean up
+rm -rf node_modules package-lock.json
+npm install
+
+
+--missing sqlite3
+npm install sqlite3 --save
+npx electron-rebuild -w sqlite3 -p
+npm install electron-rebuild --save-dev
+
+--add to packaged app
+electron-packager . local_SQL_storage_electron --platform=win32 --arch=x64 --out=dist/ --overwrite --ignore="node_modules/sqlite3"
+
+--after packaging, add sqlite3 module into 'dist/local_SQL_storage_electron-win32-x64/node_modules/sqlite3/'
+
+-- get rid of '^' for json packages...
+--refresh packages
+rm -rf node_modules package-lock.json
+npm install
+
+electron-forge make
+
+--if error persists try,
+npx electron-forge import
+
+-create installer (optional), if needed -> npm uninstall -g electron-forge
+npm install -g electron-forge
+
+-generates installer for app,
+electron-forge make
+
+
+-----------------------------------------
+
+--install R Portable in dir
+
+--install packages in it... install.packages("shiny")
+
+--at some point i added a new package and had to load new package in R.exe
+

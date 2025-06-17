@@ -1,0 +1,40 @@
+/* Light Theme Styles */
+body {
+    background-color: #ffffff;
+    color: #000000;
+}
+
+/* Buttons */
+.button,
+.action-button {
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #0056b3;
+}
+
+/* Modal */
+.modal-content {
+    background-color: #f8f9fa;
+    color: #212529;
+}
+
+/* Inputs */
+input,
+select {
+    background-color: #ffffff;
+    color: #000000;
+    border: 1px solid #ced4da;
+}
+
+/* Headers */
+h1,
+h2,
+h3 {
+    color: #212529;
+}
+
+/* Sidebar */
+.sidebar {
+    background-color: #e9ecef;
+    color: #343a40;
+}

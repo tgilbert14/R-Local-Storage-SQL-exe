@@ -1,0 +1,22 @@
+--install cordova in terminal,
+npm install -g cordova
+
+--nav to project and run,
+cordova create shiny-android-app com.example.shinyapp "Shiny Android App"
+
+This sets up a Cordova wrapper with:
+- shiny-android-app → Your project folder
+- com.example.shinyapp → Unique app identifier (change this)
+- "Shiny Android App" → App name (change as needed)
+
+--go into Cordova project
+cd shiny-android-app
+
+--add android target build,
+cordova platform add android
+
+--copy project (all html,js,assets) into www/ folder,
+shiny-android-app/www/
+
+--run to generate .apk
+cordova build android

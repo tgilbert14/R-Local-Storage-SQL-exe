@@ -1,0 +1,114 @@
+{
+    "name": "local_SQL_storage_electron",
+    "version": "1.0.0",
+    "configurations": [
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Electron Main",
+            "program": "${workspaceFolder}/main.js",
+            "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron",
+            "windows": {
+                "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/electron.cmd"
+            },
+            "args": [
+                "."
+            ],
+            "cwd": "${workspaceFolder}",
+            "env": {},
+            "console": "integratedTerminal"
+        }
+    ],
+    "description": "shiny app for local storage data collection.",
+    "main": "main.js",
+    "author": {
+        "name": "Timothy Gilbert",
+        "email": "tsgilbert@arizona.edu"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/tgilbert14"
+    },
+    "license": "CC0-1.0",
+    "keywords": [
+        "shiny",
+        "electron",
+        "sqlite",
+        "local storage",
+        "data collection"
+    ],
+    "homepage": "https://github.com/tgilbert14",
+    "scripts": {
+        "start": "electron .",
+        "build": "electron-builder",
+        "package-mac": "electron-packager . --overwrite --platform=darwin --arch=x64 --icon=cc.ico --out=ElectronShinyApp",
+        "package-win": "electron-packager . --overwrite --platform=win32 --arch=ia32 --icon=cc.ico --out=ElectronShinyApp --version-string.CompanyName=ColumbusCollaboratory --version-string.FileDescription=CE --version-string.ProductName=\"Shiny Electron App\"",
+        "package-linux": "electron-packager . --overwrite --platform=linux --arch=x64 --icon=assets/icons/png/1024x1024.png --prune=true --out=release-builds"
+    },
+    "build": {
+        "appId": "local_SQL_storage_electron",
+        "asar": false,
+        "files": [
+            "R-Portable/**",
+            "storage/SQL_storage.db",
+            "main.js",
+            "app.R",
+            "node_modules/**",
+            "package.json"
+        ],
+        "win": {
+            "target": [
+                {
+                    "target": "nsis",
+                    "arch": "x64"
+                }
+            ]
+        },
+        "nsis": {
+            "oneClick": false,
+            "perMachine": true,
+            "allowToChangeInstallationDirectory": true,
+            "uninstallDisplayName": "Shiny Storage Electron App",
+            "createDesktopShortcut": true,
+            "createStartMenuShortcut": true
+        },
+        "linux": {
+            "target": [
+                {
+                    "target": "AppImage"
+                }
+            ]
+        },
+        "mac": {
+            "target": [
+                {
+                    "target": "dmg"
+                }
+            ]
+        },
+        "dmg": {
+            "contents": [
+                {
+                    "x": 448,
+                    "y": 344,
+                    "type": "link",
+                    "path": "/Applications"
+                },
+                {
+                    "x": 192,
+                    "y": 344,
+                    "type": "file"
+                }
+            ]
+        }
+    },
+    "devDependencies": {
+        "electron": "36.4.0",
+        "electron-builder": "26.0.12",
+        "electron-prebuilt-compile": "8.2.0",
+        "electron-rebuild": "3.2.9"
+    },
+    "dependencies": {
+        "sqlite3": "5.1.7"
+    }
+}

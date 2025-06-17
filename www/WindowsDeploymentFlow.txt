@@ -1,0 +1,11 @@
+
+-open terminal and start electron (should run in another window) - check it works
+npm start
+
+-install electron packager,
+npm install -g electron-packager
+
+-package app (use app name) - windows(.exe),
+electron-packager . local_SQL_storage_electron --platform=win32 --arch=x64 --out=dist/ --overwrite
+
+npm run build
