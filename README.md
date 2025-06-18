@@ -33,8 +33,9 @@ This is a **self-contained R Shiny application** designed for **local data stora
 Your data is stored securely on your device using SQLite. You can access, modify, and export it at any time without needing an internet connection.  
 
 ## 🛠️ Built With
-- **R Shiny** – Interactive web framework for R  
-- **SQLite** – Lightweight SQL database  
-- **Electron** – Bundling for standalone executable  
+- **R Shiny** – Interactive web framework for R
+- **R-Portable** - Bundling for running R on Windows device
+- **SQLite** – Lightweight SQL database
+- **Electron** – Bundling for standalone executable
 
 ---

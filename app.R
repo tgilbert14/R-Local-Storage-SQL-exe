@@ -29,7 +29,7 @@ updateTheme <- function(theme_css) {
 }
 
 # Determine database location
-if (app_path == "C:/Users/tsgil/OneDrive/Documents/VGS - R/App-Local_SQL_electron/local_SQL_storage_electron") {
+if (app_path == "C:/Users/tsgil/OneDrive/Documents/VGS - R/App-Local_SQL_electron/R-Local-Storage-SQL-exe") {
   db_loc <- file.path(app_path, "storage", "SQL_storage.db")
 } else {
   db_loc <- file.path(Sys.getenv("PROGRAMDATA"), "local_SQL_storage_electron", "SQL_storage.db")
