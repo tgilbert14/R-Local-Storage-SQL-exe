@@ -1,0 +1,13 @@
+An open source Git extension for versioning large files
+Git Large File Storage (LFS) replaces large files such as audio samples, videos, datasets, and graphics with text pointers inside Git, while storing the file contents on a remote server like GitHub.com or GitHub Enterprise... https://git-lfs.com/
+
+#Download and install the Git command line extension. Once downloaded and installed, set up Git LFS for your user account by running:
+git lfs install
+
+#In each Git repository where you want to use Git LFS, select the file types you'd like Git LFS to manage (or directly edit your .gitattributes). You can configure additional file extensions at anytime.
+git lfs track "*.zip"
+
+#Now make sure .gitattributes is tracked:
+git add .gitattributes
+#git lfs migrate(1) 
+
