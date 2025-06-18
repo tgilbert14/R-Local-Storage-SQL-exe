@@ -1,5 +1,5 @@
 # R-Local-Storage-SQL-exe
-**A Powerful Local R Shiny App with SQL Integration** (Devlopment still in progress)
+**A Powerful Local R Shiny App with SQL Integration** (Development still in progress)
 
 ## What is this?
 This is a **self-contained R Shiny application** designed for **local data storage** with an embedded **SQL database**. Whether you're managing structured datasets, tracking experiments, or building offline apps, this tool ensures your data stays **securely stored on your device**—no cloud required!  
@@ -8,7 +8,9 @@ This is a **self-contained R Shiny application** designed for **local data stora
 ✔ **Fully Local** – Store and manage data without an internet connection  
 ✔ **SQL-Backed** – Powerful relational database for structured data storage  
 ✔ **Shiny-Powered** – Intuitive, interactive UI for seamless data exploration  
-✔ **Easy Installation** – Packaged as a `.exe` using **Electron**, making deployment effortless  
+✔ **Easy Installation** – Packaged as a `.exe` using **Electron**, making deployment effortless 
+✔ **R-Portable** – App bundled with **R-Portable** allowing it to run on Windows devices without R installed
+
 
 ## How It Works 
 1️⃣ **Install the `.exe`** – No need for complex setup  
