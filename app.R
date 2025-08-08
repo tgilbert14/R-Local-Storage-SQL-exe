@@ -6,6 +6,9 @@ library(uuid)
 library(shinytoastr)
 library(digest)
 library(shinyjs)
+library(shinythemes)
+
+#data.frame(installed.packages()[ ,c("Package", "Version")])
 
 # Get app path
 app_path <- getwd()
@@ -40,13 +43,21 @@ mydb <- dbConnect(RSQLite::SQLite(), dbname = db_loc)
 log_path <- file.path(Sys.getenv("PROGRAMDATA"), "local_SQL_storage_electron", "app_R.log")
 write(paste("Connected to SQLite database at:", db_loc), file = log_path, append = TRUE)
 
+# Get Data
+getData <- function(table) {
+  sql <-  "SELECT * FROM ?fromTable"
+  query <- sqlInterpolate(mydb, sql, fromTable = table)
+  table.data <- dbGetQuery(mydb, query)
+}
+
 # <-- UI -->
 ui <- fluidPage(
   
   useToastr(),
   useShinyjs(),
+  theme = shinytheme("paper"),
   
-  titlePanel("Yo yo mah"),
+  titlePanel("Store My Data 🦐"),
   uiOutput("login_ui"),
   
   # inactivity log out
@@ -86,37 +97,39 @@ ui <- fluidPage(
              
              sidebarLayout(
                sidebarPanel(
-                 textInput("subject", "Subject", ""),
-                 textInput("description", "Description", ""),
-                 actionButton("go", "Go!"),
-                 actionButton("delete", "Delete Selected"),
-                 downloadButton("download_db", "Download Database")
+                 # textInput("subject", "Subject", ""),
+                 # textInput("description", "Description", ""),
+                 # actionButton("go", "Add"),
+                 downloadButton("download_db", "Download Database"),
+                 br(),
+                 textOutput("selected_sub")
                ),
                mainPanel(
                  tabsetPanel(
-                   tabPanel("Subjects ->",
+                   tabPanel("Select Subject",
                             br(),
                             actionButton("open_subject_modal", "Choose Subject", icon = icon("list")),
-                            textOutput("selected_subject_label")
-                   ),
-                   tabPanel("Storage ->",
-                            br()
-                   ),
-                   tabPanel("Samples ->",
-                            br()
-                   ),
-                   tabPanel("Subject Table",
+                            br()),
+                   
+                   tabPanel("Storage",
+                            br()),
+                   
+                   tabPanel("Samples",
+                            br()),
+                   
+                   tabPanel("Sample",
+                            br()),
+                   
+                   tabPanel("My Subjects",
                             verbatimTextOutput("distText"),
-                            dataTableOutput("dataTable")
-                   ),
-                   
-                   
-                   
-                   tabPanel("Sample")
+                            dataTableOutput("dataTable"),
+                            br(),
+                            actionButton("delete", "Delete Selected")
                  )
                )
              )
   ))
+)
 )
 
 # <-- Server -->
@@ -326,7 +339,7 @@ observeEvent(input$open_settings, {
   showModal(modalDialog(
     title = "Settings",
     checkboxInput("show_welcome", "Show welcome message on startup", value = get_val("show_welcome", "FALSE") == "TRUE"),
-    selectInput("theme_choice", "Theme", choices = c("Light", "Dark", "System"), selected = get_val("theme", "System")),
+    #selectInput("theme_choice", "Theme", choices = c("Light", "Dark", "System"), selected = get_val("theme", "System")),
     selectInput("coordinate_system", "Coordinate System", choices = c("Decimal Degrees", "DMS", "UTM"), selected = get_val("coordinate_system", "Decimal Degrees")),
     selectInput("language", "Language", choices = c("English", "Spanish", "French"), selected = get_val("language", "English")),
     checkboxInput("code_display", "Enable Code Display", value = get_val("code_display", "FALSE") == "TRUE"),
@@ -343,7 +356,7 @@ observeEvent(input$save_settings, {
   user <- current_user()
   settings <- list(
     show_welcome = as.character(input$show_welcome),
-    theme = input$theme_choice,
+    #theme = input$theme_choice,
     coordinate_system = input$coordinate_system,
     language = input$language,
     code_display = as.character(input$code_display)
@@ -360,15 +373,15 @@ observeEvent(input$save_settings, {
   removeModal()
 })
 
-# update for theme choice
-observeEvent(input$theme_choice, {
-  theme_css <- switch(input$theme_choice,
-                      "Light" = "light-theme.css",
-                      "Dark" = "dark-theme.css",
-                      "System" = ifelse(Sys.info()["sysname"] == "Windows", "light-theme.css", "dark-theme.css"))
-  
-  updateTheme(theme_css)
-})
+# # update for theme choice
+# observeEvent(input$theme_choice, {
+#   theme_css <- switch(input$theme_choice,
+#                       "Light" = "light-theme.css",
+#                       "Dark" = "dark-theme.css",
+#                       "System" = ifelse(Sys.info()["sysname"] == "Windows", "light-theme.css", "dark-theme.css"))
+#   
+#   updateTheme(theme_css)
+# })
 
 # get data
 data <- reactive({
@@ -409,9 +422,7 @@ observeEvent(input$submit_subject, {
       pk_guid <- Convert2Hex(UUIDgenerate())
       
       sql <-  "INSERT INTO subject (pk_subject, name_subject) VALUES (?pk_subject, ?value)"
-      #stop(sql)
-      
-      
+    
       query <- sqlInterpolate(mydb, sql, pk_subject = SQL(pk_guid), value = new_subj)
       result <- tryCatch(dbExecute(mydb, query), error = function(e) 0)
       if (result == 1) {
@@ -425,24 +436,27 @@ observeEvent(input$submit_subject, {
     } else {
       subj <- dbGetQuery(mydb, "SELECT pk_subject FROM subject WHERE name_subject = ?", params = list(new_subj))$pk_subject[1]
     }
+
   }
   
-  # output$selected_subject_label <- renderText({
-  #   name <- dbGetQuery(mydb, "SELECT name_subject FROM subject WHERE pk_subject = ?", params = list(subj))$name_subject[1]
-  #   paste("Selected Subject:", name)
-  # })
+  # confirm selection
+  output$selected_sub <- renderPrint({
+    pick <- get_subject_choices()
+    paste0("Selected: ", pick[input$open_subject_modal])
+  })
   
   removeModal()
 })
 
 # initial table render
 output$dataTable <- renderDataTable({
-  d <- data()
-  d <- d[names(d) != "quote(pk_subject)"]
+  d <<- data()
+  names(d)[2] <- "Subject"
+  d <- d[names(d) == "Subject"]
   datatable(d, selection = "single")
 })
 
-# go button
+# add subject button
 observeEvent(input$go, {
   sub_data <- dbGetQuery(mydb, "SELECT name_subject FROM Subject")
   if (input$subject %in% sub_data$name_subject) {
@@ -477,8 +491,9 @@ observeEvent(input$delete, {
     return()
   }
   pk <- db.data[row, "quote(pk_subject)"]
+  name <- db.data[row, "name_subject"]
   del_query <- paste0("DELETE FROM subject WHERE pk_subject = ", pk)
-  output$distText <- renderPrint({ cat("Deleting subject:", pk, "\n") })
+  output$distText <- renderPrint({ cat("Deleted subject:", name, "\n") })
   result <- tryCatch(dbExecute(mydb, del_query), error = function(e) 0)
   
   if (result == 1) {
