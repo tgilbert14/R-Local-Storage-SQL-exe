@@ -1,0 +1,13 @@
+{
+  "extraKnownMarketplaces": {
+    "ddl": {
+      "source": {
+        "source": "github",
+        "repo": "tgilbert14/TG-Data-Apps"
+      }
+    }
+  },
+  "enabledPlugins": {
+    "ddl-fleet@ddl": true
+  }
+}
